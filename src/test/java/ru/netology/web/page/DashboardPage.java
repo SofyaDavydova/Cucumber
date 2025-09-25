@@ -15,6 +15,7 @@ public class DashboardPage {
     private ElementsCollection cards = $$(".list__item div");
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
+    private final String cardNumberStart = "5559 0000 0000 ";
     private SelenideElement reloadButton = $("[data-test-id=action-reload]");
 
 
@@ -30,6 +31,25 @@ public class DashboardPage {
 
     private SelenideElement getCardElement(DataHelper.CardInfo cardInfo){
         return cards.findBy(Condition.attribute("data-test-id", cardInfo.getCardID()));
+    }
+
+    private SelenideElement getCardElementByCardNumber(String cardNumber){
+        var value = cardNumber.substring(cardNumberStart.length(), cardNumberStart.length() + 4);
+        return cards.findBy(Condition.text(value));
+    }
+
+    public int getCardBalanceByCardNumber(String cardNumber) {
+        var text = getCardElementByCardNumber(cardNumber).text();
+        return extractBalance(text);
+    }
+
+    private SelenideElement getCardElementByIndex(int index){
+        return cards.get(index - 1);
+    }
+
+    public int getCardBalanceByIndex(int index) {
+        var text = getCardElementByIndex(index).text();
+        return extractBalance(text);
     }
 
     private int extractBalance(String text) {
@@ -51,6 +71,11 @@ public class DashboardPage {
 
     public SupplementPage supplemention(DataHelper.CardInfo cardInfo) {
         getCardElement(cardInfo).$("[data-test-id=action-deposit]").click();
+        return new SupplementPage();
+    }
+
+    public SupplementPage supplementionByIndex(int index) {
+        getCardElementByIndex(index).$("[data-test-id=action-deposit]").click();
         return new SupplementPage();
     }
 

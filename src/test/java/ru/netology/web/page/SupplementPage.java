@@ -31,6 +31,17 @@ public class SupplementPage {
         return new DashboardPage();
     }
 
+    public void cardSupplementionByCardNumber(String cardNumberFrom, int addSum){
+        sumField.setValue(String.valueOf(addSum));
+        cardFrom.setValue(cardNumberFrom);
+        supplementButton.click();
+    }
+
+    public DashboardPage succesCardSupplementationByCardNumber (String cardNumberFrom, int addSum){
+        cardSupplementionByCardNumber(cardNumberFrom, addSum);
+        return new DashboardPage();
+    }
+
     public void findErrorMessage (String expectedText){
         errorMessage.shouldHave(Condition.text(expectedText), Duration.ofSeconds(15)).shouldBe(visible);
     }
